@@ -1,12 +1,136 @@
 apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: 'cargo'
+apply plugin: 'cargo-base'
+apply plugin: 'flyway'
 
-sourceCompatibility = 1.5
+ext {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+}
 version = '1.0'
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5'
+        classpath 'org.flywaydb:flyway-gradle-plugin:3.0'
+    }
+}
+
+def spring_version           = "4.0.7.RELEASE"
+def hibernate_version        = "4.3.6.Final"
+def spring_data_jpa_version  = "1.7.0.RELEASE"
+def spring_data_rest_version = "2.2.0.RELEASE"
+def slf4j_version            = "1.7.7"
+def log4j_version            = "1.2.16"
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    //Servlet API
+    providedCompile "javax.servlet:javax.servlet-api:3.0.1"
+
+    compile 'javax.validation:validation-api:1.1.0.GA'
+    compile 'javax.el:javax.el-api:2.2.4'
+    compile 'org.glassfish.web:javax.el:2.2.4'
+
+
+    //Spring Framework
+    compile(
+            "org.springframework:spring-web:${spring_version}"
+            ,"org.springframework:spring-webmvc:${spring_version}"
+            ,"org.springframework:spring-orm:${spring_version}"
+            ,"org.springframework:spring-tx:${spring_version}"
+            ,"org.springframework.data:spring-data-jpa:${spring_data_jpa_version}"
+    )
+
+    //Jackson
+    compile(
+            'com.fasterxml.jackson.core:jackson-core:2.4.2'
+           ,'com.fasterxml.jackson.core:jackson-databind:2.4.2'
+           ,'com.fasterxml.jackson.core:jackson-annotations:2.4.2'
+    )
+
+    //Hibernate
+    compile(
+            "org.hibernate:hibernate-core:${hibernate_version}"
+            ,"org.hibernate:hibernate-entitymanager:${hibernate_version}"
+            ,"org.hibernate:hibernate-validator:5.1.2.Final"
+    )
+
+    //slf4J
+    compile(
+            "org.slf4j:slf4j-api:${slf4j_version}"
+            ,"org.slf4j:slf4j-log4j12:${slf4j_version}"
+    )
+
+    //Log4J
+    compile "log4j:log4j:${log4j_version}"
+
+    //JDBC Driver
+    compile 'mysql:mysql-connector-java:5.1.6'
+
+    //Test
+    testCompile(
+            'junit:junit:4.11'
+            ,'org.mockito:mockito-all:1.8.4'
+            ,'org.dbunit:dbunit:2.5.0'
+            ,'com.github.springtestdbunit:spring-test-dbunit:1.1.0'
+            ,'com.jayway.jsonpath:json-path:0.9.1'
+            ,"org.springframework:spring-test:${spring_version}"
+    );
+
+}
+
+test {
+    scanForTestClasses = false
+
+    exclude 'example/todo/config/**'
+    exclude 'test/**'
+
+}
+
+flyway {
+    def enviroment = 'development'
+    switch(enviroment) {
+        case "development" :
+            url = 'jdbc:mysql://localhost:3306/angular_todo_development'
+            user = 'todo'
+            password = 's3cret'
+        case "test" :
+            url = 'jdbc:mysql://localhost:3306/angular_todo_test'
+            user = 'todo'
+            password = 's3cret'
+        case "production" :
+            url = 'jdbc:mysql://localhost:3306/angular_todo'
+            user = 'todo'
+            password = 's3cret'
+        default :
+            url = 'jdbc:mysql://localhost:3306/angular_todo_development'
+            user = 'todo'
+            password = 's3cret'
+    }
+}
+
+cargo {
+    containerId = 'tomcat7x'
+    port = 18080
+    deployable {
+        context = 'todo'
+    }
+    remote {
+        hostname = 'localhost'
+        username = 'tomcat'
+        password = 's3cret'
+    }
 }

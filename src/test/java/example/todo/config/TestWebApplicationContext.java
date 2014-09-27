@@ -1,18 +1,31 @@
 package example.todo.config;
 
+import example.todo.services.TodoService;
+import org.mockito.Mockito;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.method.annotation.ExceptionHandlerMethodResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
+import org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.lang.reflect.Method;
 
 
 /**
@@ -33,6 +46,14 @@ public class TestWebApplicationContext {
     private static final String CONTROLLER_PACKAGE     = "example.todo.controllers";
     private static final String MODEL_PACKAGE          = "example.todo.models";
 
+    private static final String PROPERTY_NAME_MESSAGESOURCE_BASENAME                    = "message.source.basename";
+    private static final String PROPERTY_NAME_MESSAGESOURCE_USE_CODE_AS_DEFAULT_MESSAGE = "message.source.use.code.as.default.message";
+
+
+    @Resource
+    private Environment environment;
+
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds =  new DriverManagerDataSource();
@@ -45,7 +66,6 @@ public class TestWebApplicationContext {
 
     @Bean
     public EntityManagerFactory entityManagerFactory() {
-
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(false);
 
@@ -57,9 +77,9 @@ public class TestWebApplicationContext {
 
         return factory.getObject();
     }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
-
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(false);
 
@@ -74,10 +94,17 @@ public class TestWebApplicationContext {
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory());
         return txManager;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename(environment.getProperty(PROPERTY_NAME_MESSAGESOURCE_BASENAME));
+        messageSource.setUseCodeAsDefaultMessage(Boolean.parseBoolean(environment.getProperty(PROPERTY_NAME_MESSAGESOURCE_USE_CODE_AS_DEFAULT_MESSAGE)));
+        return messageSource;
     }
 
 }

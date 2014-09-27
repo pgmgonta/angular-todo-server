@@ -4,11 +4,15 @@ import example.todo.dtos.TodoDTO;
 import example.todo.models.Todo;
 import example.todo.repositories.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by tatsuya on 2014/09/20.
@@ -16,8 +20,13 @@ import java.util.List;
 @Service
 public class TodoRepositoryService implements TodoService {
 
+    private static final String TODO_NOT_FOUND_MESSAGE = "todo.notfound.message";
+
     @Resource
     TodoRepository todoRepository;
+
+    @Resource
+    MessageSource messageSource;
 
     @Override
     @Transactional
@@ -34,7 +43,7 @@ public class TodoRepositoryService implements TodoService {
     public Todo delete(long id) throws NotFoundException {
         Todo t = todoRepository.findOne(id);
         if (t == null) {
-            throw new NotFoundException();
+            throw new NotFoundException(TODO_NOT_FOUND_MESSAGE);
         }
         todoRepository.delete(t);
         return t;
@@ -45,7 +54,7 @@ public class TodoRepositoryService implements TodoService {
     public Todo findById(long id) throws NotFoundException {
         Todo t = todoRepository.findOne(id);
         if (t == null) {
-            throw new NotFoundException();
+            throw new NotFoundException(TODO_NOT_FOUND_MESSAGE);
         }
         return t;
     }
@@ -55,7 +64,7 @@ public class TodoRepositoryService implements TodoService {
     public Todo update(TodoDTO updated) throws NotFoundException {
         Todo t = todoRepository.findOne(updated.getId());
         if (t == null) {
-            throw new NotFoundException();
+            throw new NotFoundException(TODO_NOT_FOUND_MESSAGE);
         }
         t.setAuthor(updated.getAuthor());
         t.setDescription(updated.getDescription());
@@ -66,6 +75,11 @@ public class TodoRepositoryService implements TodoService {
     @Override
     public List<Todo> findAll() {
         return todoRepository.findAll();
+    }
+
+    private String getMessage(String message, Object... args) {
+        Locale current = LocaleContextHolder.getLocale();
+        return messageSource.getMessage(message, args, current);
     }
 
 

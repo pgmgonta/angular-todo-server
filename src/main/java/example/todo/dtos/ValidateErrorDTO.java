@@ -16,7 +16,7 @@ public final class ValidateErrorDTO {
 
     public void addFieldError(final String path, final String message) {
         FieldErrorDTO error = new FieldErrorDTO();
-        error.setMessage(path);
+        error.setPath(path);
         error.setMessage(message);
         errorMessages.add(error);
     }

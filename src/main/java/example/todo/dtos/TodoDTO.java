@@ -16,16 +16,15 @@ public final class TodoDTO {
 
     @NotEmpty
     @NotNull
-    @Size(min=1, max=256)
+    @Size(min=1, max=256, message="todo.validation.error.author.size")
     private String author;
 
     @NotEmpty
     @NotNull
-    @Size(min=1, max=512)
+    @Size(min=1, max=512, message="todo.validation.error.description.size")
     private String description;
 
     @NotNull
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date   dueDate;
 
     public long getId() {

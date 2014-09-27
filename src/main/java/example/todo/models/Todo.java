@@ -20,11 +20,9 @@ public class Todo {
     private long id;
 
     @Column(name = "author", length = 256, nullable = false)
-    @Size(min = 1, max = 256)
     private String author;
 
     @Column(name = "description", length = 512, nullable = false)
-    @Size(min = 1, max = 512)
     private String description;
 
     @Column(name = "due_date", nullable = false)
@@ -54,7 +52,6 @@ public class Todo {
         this.description = description;
     }
 
-    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone = "JST")
     public Date getDueDate() {
         return dueDate;
     }

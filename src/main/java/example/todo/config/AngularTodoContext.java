@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -39,6 +41,9 @@ public class AngularTodoContext {
     private static final String EXAMPLE_TODO_REPOSITORIES_PACKAGE   = "example.todo.repositories";
     private static final String EXAMPLE_TODO_MODELS_PACKAGE         = "example.todo.models";
 
+    private static final String PROPERTY_NAME_MESSAGESOURCE_BASENAME                    = "message.source.basename";
+    private static final String PROPERTY_NAME_MESSAGESOURCE_USE_CODE_AS_DEFAULT_MESSAGE = "message.source.use.code.as.default.message";
+
     @Resource
     private Environment environment;
 
@@ -61,6 +66,7 @@ public class AngularTodoContext {
 
         return factory.getObject();
     }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
 
@@ -81,5 +87,13 @@ public class AngularTodoContext {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory());
         return txManager;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename(environment.getProperty(PROPERTY_NAME_MESSAGESOURCE_BASENAME));
+        messageSource.setUseCodeAsDefaultMessage(Boolean.parseBoolean(environment.getProperty(PROPERTY_NAME_MESSAGESOURCE_USE_CODE_AS_DEFAULT_MESSAGE)));
+        return messageSource;
     }
 }

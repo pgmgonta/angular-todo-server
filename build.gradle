@@ -28,7 +28,7 @@ buildscript {
     }
 }
 
-def spring_version           = "4.0.7.RELEASE"
+def spring_version           = "4.1.0.RELEASE"
 def hibernate_version        = "4.3.6.Final"
 def spring_data_jpa_version  = "1.7.0.RELEASE"
 def spring_data_rest_version = "2.2.0.RELEASE"

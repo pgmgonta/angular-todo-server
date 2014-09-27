@@ -12,7 +12,7 @@ public interface TodoService {
 
     Todo create(TodoDTO created);
 
-    Todo delete(long id) throws  NotFoundException;
+    Todo delete(long id) throws NotFoundException;
 
     List<Todo> findAll();
 

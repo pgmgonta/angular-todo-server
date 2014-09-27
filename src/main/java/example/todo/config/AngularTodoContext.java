@@ -1,26 +1,18 @@
 package example.todo.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
-import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.annotation.Resource;
@@ -37,11 +29,11 @@ import javax.sql.DataSource;
 @ComponentScan({"example.todo.controllers", "example.todo.services"})
 public class AngularTodoContext {
 
-    private static final String JDBC_DATA_SOURCE_JNDI_NAME          = "jdbc/todo";
-    private static final String EXAMPLE_TODO_REPOSITORIES_PACKAGE   = "example.todo.repositories";
-    private static final String EXAMPLE_TODO_MODELS_PACKAGE         = "example.todo.models";
+    private static final String JDBC_DATA_SOURCE_JNDI_NAME = "jdbc/todo";
+    private static final String EXAMPLE_TODO_REPOSITORIES_PACKAGE = "example.todo.repositories";
+    private static final String EXAMPLE_TODO_MODELS_PACKAGE = "example.todo.models";
 
-    private static final String PROPERTY_NAME_MESSAGESOURCE_BASENAME                    = "message.source.basename";
+    private static final String PROPERTY_NAME_MESSAGESOURCE_BASENAME = "message.source.basename";
     private static final String PROPERTY_NAME_MESSAGESOURCE_USE_CODE_AS_DEFAULT_MESSAGE = "message.source.use.code.as.default.message";
 
     @Resource

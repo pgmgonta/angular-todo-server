@@ -1,21 +1,17 @@
 package example.todo.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
  * Created by tatsuya on 2014/09/20.
  */
 @Entity
-@Table(name="todos")
+@Table(name = "todos")
 public class Todo {
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 

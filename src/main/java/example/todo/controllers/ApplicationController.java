@@ -5,7 +5,6 @@ import example.todo.services.NotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,14 +24,17 @@ public abstract class ApplicationController {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public final @ResponseBody
+    public final
+    @ResponseBody
     String notFoundExceptionHandle(NotFoundException ex) {
         Locale current = LocaleContextHolder.getLocale();
         return messageSource.getMessage(ex.getMessage(), null, current);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public final @ResponseBody
+    public final
+    @ResponseBody
     ValidateErrorDTO validateExceptionHandle(MethodArgumentNotValidException ex) {
         Locale current = LocaleContextHolder.getLocale();
         ValidateErrorDTO validateErrorDTO = new ValidateErrorDTO();

@@ -3,8 +3,6 @@ package example.todo.services;
 import example.todo.dtos.TodoDTO;
 import example.todo.models.Todo;
 import example.todo.repositories.TodoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;

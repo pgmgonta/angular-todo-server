@@ -1,22 +1,16 @@
 package example.todo.controllers;
 
 import example.todo.dtos.TodoDTO;
-import example.todo.dtos.ValidateErrorDTO;
 import example.todo.models.Todo;
 import example.todo.services.NotFoundException;
-import example.todo.services.TodoRepositoryService;
 import example.todo.services.TodoService;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tatsuya on 2014/09/20.
@@ -29,7 +23,7 @@ public class TodoController {
 
     //get one
     @RequestMapping(value = "{typeId}", method = RequestMethod.GET)
-    public TodoDTO get(@PathVariable("typeId") long typeId) throws NotFoundException{
+    public TodoDTO get(@PathVariable("typeId") long typeId) throws NotFoundException {
         return createDTO(todoService.findById(typeId));
     }
 
@@ -70,10 +64,10 @@ public class TodoController {
 
     private List<TodoDTO> createDTOList(List<Todo> entities) {
         ArrayList<TodoDTO> todos = new ArrayList<TodoDTO>();
-        for(Todo t : entities) {
+        for (Todo t : entities) {
             todos.add(createDTO(t));
         }
         return todos;
     }
 
- }
+}

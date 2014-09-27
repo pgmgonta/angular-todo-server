@@ -27,14 +27,17 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public final @ResponseBody
+    public final
+    @ResponseBody
     String notFoundExceptionHandle(NotFoundException ex) {
         Locale current = LocaleContextHolder.getLocale();
         return messageSource.getMessage(ex.getMessage(), null, current);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public final @ResponseBody
+    public final
+    @ResponseBody
     ValidateErrorDTO validateExceptionHandle(MethodArgumentNotValidException ex) {
         Locale current = LocaleContextHolder.getLocale();
         ValidateErrorDTO validateErrorDTO = new ValidateErrorDTO();

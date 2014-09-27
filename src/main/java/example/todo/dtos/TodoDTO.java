@@ -1,6 +1,5 @@
 package example.todo.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -16,16 +15,16 @@ public final class TodoDTO {
 
     @NotEmpty
     @NotNull
-    @Size(min=1, max=256, message="todo.validation.error.author.size")
+    @Size(min = 1, max = 256, message = "todo.validation.error.author.size")
     private String author;
 
     @NotEmpty
     @NotNull
-    @Size(min=1, max=512, message="todo.validation.error.description.size")
+    @Size(min = 1, max = 512, message = "todo.validation.error.description.size")
     private String description;
 
     @NotNull
-    private Date   dueDate;
+    private Date dueDate;
 
     public long getId() {
         return id;
